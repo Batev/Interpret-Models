@@ -51,6 +51,12 @@ This project consists of one main modules: **interpret_model.py**.
 | macro avg    | 0.71      | 0.70   | 0.69     | 2400    |
 | weighted avg | 0.71      | 0.70   | 0.69     | 2400    |
 
+From the classifications reports we could identify some specifics about the three models. Models 1. and 2. show almost equal performance in both accuracy and precision and recall. On the other hand, the Model 3. (balanced one) performs slightly worse than the other two (due to the smaller train data set) and shows precision and recall different results.
+
+- [Precision](https://www.scikit-yb.org/en/latest/api/classifier/classification_report.html) is the ability of a classifier not to label an instance positive that is actually negative -> The precision percent of people that earn >= 50k is higher (less false negatives) in contrast to the other two models precision percent of people that earn < 50k is lower than the other two models.
+
+- [Recall](https://www.scikit-yb.org/en/latest/api/classifier/classification_report.html) is the ability of a classifier to find all positive instances. All three models have almost the same recall regarding the people that < 50k (~80% of the people that earn < 50k were truly classified). But on the contrary Model 3. performs worse on the people that earn >= 50k and were truly classified (less false negatives for 1. and 2.).
+
 - Feature importance table for each of the models. *(Weight: Feature)*
 
 | Model 1.                                    | Model 2.                               | Model 3.                               |
@@ -89,3 +95,11 @@ This project consists of one main modules: **interpret_model.py**.
 > 1. Depending on regularization, rare features sometimes may have high
    coefficients; this doesn't mean they contribute much to the
    classification result for most examples.
+
+We can now evaluate the feature importance of each model:
+
+- On the one hand we could see that in Model 1. the columns: marital-status and relationship play an important role in deciding wheather a person should earn >= 50k. In my opinion these two columns should not be part of the models and were therefore removed in Model 2. and Model 3. Looking at Model 2. we could now see that the most important role in deciding whether a person earns >= 50k is played by the columns: *capital-gain*, *occupation* and *education-num*.
+
+- On the other hand we see that in Model 2. a key influancer on deciding whether a persoin should earn < 50k is the gender. The feature *gender__ Female* affects the prediction in a negative way, and, therefore, I have balanced the data set in Model 3. to have equal number of *males* and *females* that earn >= 50k or < 50k (see *support* in the classification report). As we can see in the feature importance column of Model 3., this have not made any positive impact or the negativity of the *gender__ Female* feature.
+
+Let us now interpert and evaluate some examples of the test data set. 
