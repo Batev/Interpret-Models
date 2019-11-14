@@ -298,3 +298,8 @@ In this example we can see that only Model 4. classified the person's income rig
 | -0.339  relationship__ Husband                   | -1.103  education-num                            | -1.134  education-num                            |                                                   |
 | -0.932  BIAS                                     |                                                  |                                                  |                                                   |
 | -1.202  education-num                            |                                                  |                                                  |                                                   |
+
+## TODO
+
+- Interpret and evaluate the results of the models trained with a *Decision Tree Classifier* 
+> Currently the *Decision Tree Classifier*'s code is commented out.
