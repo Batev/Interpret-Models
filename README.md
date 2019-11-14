@@ -139,6 +139,8 @@ Let us now interpret and evaluate some concrete examples of the test data set.
 | hours-per-week | 36                 |
 | income         | >=50k              |
 
+From my point of view this person should be classified as one earning <50k, bacause of his *age*, *hours-per-week* and *education*. That are also the results of Models 2., 3. and 4. Due to the huge impact of the *marital-status* on the decision, Model 1. has predicted, the otherwise unexpected result, right.
+
 | Model 1. \| y=1 (probability=0.580, score=0.324) | Model 2. \| y=0 (probability=0.576, score=-0.304) | Model 3. \| y=0 (probability=0.561, score=-0.247) | Model 4. \| y=0 (probability=0.646, score=-0.599) |
 |:-------------------------------------------------|:--------------------------------------------------|:--------------------------------------------------|:--------------------------------------------------|
 | +1.516: marital-status__ Married-civ-spouse      | +0.705: BIAS                                      | +0.842: BIAS                                      | +1.289: BIAS                                      |
@@ -154,8 +156,6 @@ Let us now interpret and evaluate some concrete examples of the test data set.
 | -0.337: capital-gain                             | -0.428: occupation__ Sales                        | -0.426: gender__ Male                             |                                                   |
 | -0.339: relationship__ Husband                   |                                                   |                                                   |                                                   |
 | -0.932: BIAS                                     |                                                   |                                                   |                                                   |
-
-From my point of view this person should be classified as one earning <50k, bacause of his *age*, *hours-per-week* and *education*. That are also the results of Models 2., 3. and 4. Due to the huge impact of the *marital-status* on the decision, Model 1. has predicted, the otherwise unexpected result, right.
 
 #### Example 2
 
@@ -173,6 +173,8 @@ From my point of view this person should be classified as one earning <50k, baca
 | hours-per-week | 52      |
 | income         | <50k    |
 
+This example is interesting because only Model 4. classifies it wrong, because the information about the *capital-gain* and *capital-loss* is not convincing and the most valuable feature is the *ethnicity*, which should also have been removed. 
+
 | Model 1. \| y=0 (probability=0.881, score=-2.005) | Model 2. \| y=0 (probability=0.686, score=-0.783) | Model 3. \| y=0 (probability=0.775, score=-1.239) top features | Model 4. \| y=1 (probability=0.541, score=0.163) |
 |:--------------------------------------------------|:--------------------------------------------------|:---------------------------------------------------------------|:-------------------------------------------------|
 | +0.932: BIAS                                      | +0.913: gender__ Female                           | +1.268: gender__ Female                                        | +0.926:  ethnicity__ White                       |
@@ -188,8 +190,6 @@ From my point of view this person should be classified as one earning <50k, baca
 | -0.253: age                                       | -0.428: occupation__ Sales                        | -0.419: occupation__ Sales                                     |                                                  |
 | -0.399: hours-per-week                            |                                                   |                                                                |                                                  |
 | -0.414: occupation__ Sales                        |                                                   |                                                                |                                                  |
-
-This example is interesting because only Model 4. classifies it wrong, because the information about the *capital-gain* and *capital-loss* is not convincing and the most valuable feature is the *ethnicity*, which should also have been removed. 
 
 #### Example 3
 
@@ -209,6 +209,8 @@ This example is interesting because only Model 4. classifies it wrong, because t
 | hours-per-week | 40             |
 | income         | >=50k          |
 
+There are quite a lot of such examples in which Model 1. got the wrong result and Models 2., 3. and 4. guessed it right. In this case we could see that the decision for the person's income to be <50k of the first Model is mainly based on the fact that the person has *never married*. In the other three cases there are not strong indicators for a negative decision.
+
 | Model 1. \| y=0 (probability=0.590, score=-0.363) | Model 2. \| y=1 (probability=0.761, score=1.157) | Model 3. \| y=1 (probability=0.771, score=1.214) | Model 4. \|  y=1 (probability=0.677, score=0.739) |
 |---------------------------------------------------|--------------------------------------------------|--------------------------------------------------|---------------------------------------------------|
 | +1.015: marital-status__ Never-married            | +0.793:  education-num                           | +0.833: education-num                            | +0.926: ethnicity__ White                         |
@@ -224,8 +226,6 @@ This example is interesting because only Model 4. classifies it wrong, because t
 | -0.193: age                                       | -0.705:  BIAS                                    | -0.842: BIAS                                     |                                                   |
 | -0.701: occupation__ Prof-specialty               |                                                  |                                                  |                                                   |
 | -0.864: education-num                             |                                                  |                                                  |                                                   |
-
-There are quite a lot of such examples in which Model 1. got the wrong result and Models 2., 3. and 4. guessed it right. In this case we could see that the decision for the person's income to be <50k of the first Model is mainly based on the fact that the person has *never married*. In the other three cases there are not strong indicators for a negative decision.  
 
 #### Example 4
 
@@ -245,6 +245,8 @@ There are quite a lot of such examples in which Model 1. got the wrong result an
 | hours-per-week | 65                 |
 | income         | >=50k              |
 
+In this example we see that only Model 2. classified the person's income wrong, bacause of his *occupation* as *Farming-fishing*. Model 3. and 4. have balanced data sets and in Model 1. the prediction was strongly influenced by the *material-status*.
+
 | Model 1. \| y=1 (probability=0.665, score=0.685) | Model 2. \| y=0 (probability=0.526, score=-0.105) | Model 3. \| y=1 (probability=0.516, score=0.063) | Model 4. \| y=1 (probability=0.507, score=0.030) |
 |--------------------------------------------------|---------------------------------------------------|--------------------------------------------------|--------------------------------------------------|
 | +1.516: marital-status__ Married-civ-spouse      | +0.910: occupation__ Farming-fishing              | +0.880: hours-per-week                           | +0.951: hours-per-week                           |
@@ -260,8 +262,6 @@ There are quite a lot of such examples in which Model 1. got the wrong result an
 | -0.339: relationship__ Husband                   | -0.821: hours-per-week                            | -0.842: BIAS                                     |                                                  |
 | -0.926: occupation__ Farming-fishing             |                                                   |                                                  |                                                  |
 | -0.932: BIAS                                     |                                                   |                                                  |                                                  |
-
-In this example we see that only Model 2. classified the person's income wrong, bacause of his *occupation* as *Farming-fishing*. Model 3. and 4. have balanced data sets and in Model 1. the prediction was strongly influenced by the *material-status*.
 
 #### Example 5
 
@@ -281,6 +281,8 @@ In this example we see that only Model 2. classified the person's income wrong, 
 | hours-per-week | 45                 |
 | income         | <50k               |
 
+In this example we can see that only Model 4. classified the person's income right, because it was not biased by columns (that otherwise should not play role in the decision) such as: *marital-status*, *relationship*, *gender*.
+
 | Model 1. \| y=1 (probability=0.625, score=0.510) | Model 2. \| y=1 (probability=0.551, score=0.204) | Model 3. \| y=1 (probability=0.560, score=0.241) | Model 4. \| y=0 (probability=0.546, score=-0.183) |
 |--------------------------------------------------|--------------------------------------------------|--------------------------------------------------|---------------------------------------------------|
 | +1.516  marital-status__ Married-civ-spouse      | +1.007  occupation__ Exec-managerial             | +0.968  occupation__ Exec-managerial             | +1.289  BIAS                                      |
@@ -296,5 +298,3 @@ In this example we see that only Model 2. classified the person's income wrong, 
 | -0.339  relationship__ Husband                   | -1.103  education-num                            | -1.134  education-num                            |                                                   |
 | -0.932  BIAS                                     |                                                  |                                                  |                                                   |
 | -1.202  education-num                            |                                                  |                                                  |                                                   |
-
-In this example we can see that only Model 4. classified the person's income right, because it was not biased by columns (that otherwise should not play role in the decision) such as: *marital-status*, *relationship*, *gender*.
