@@ -1,6 +1,6 @@
 # White-Box Model Interpretation
 
-Logistic Regression and Decision Tree Classifiers are being trained with the [Census Income Data Set](https://archive.ics.uci.edu/ml/datasets/census+income) to predict weather a person makes over 50K a year. Four different models per classifier are being trained - (1.) one with the raw data set without any modifications, (2.) one with two removed features: *marital-status*, *relationship*, (3.) one with the same features removed but a balanced (on *gender*) data set (with [xai](https://github.com/EthicalML/xai) toolbox) and (4.) one more balanced (on *ethnicity*) data set with removed: *marital-status*, *relationship* and gender. Then these models are being interpreted using the [eli5](https://github.com/TeamHG-Memex/eli5) library.
+Logistic Regression and Decision Tree Classifiers are being trained with the [Census Income Data Set](https://archive.ics.uci.edu/ml/datasets/census+income) to predict weather a person makes over 50K a year. Four different models per classifier are being trained - (1.) one with the raw data set without any modifications, (2.) one with two removed features: *marital-status*, *relationship*, (3.) one with the same features removed but a balanced (on *gender*) data set (with [xai](https://github.com/EthicalML/xai) toolbox) and (4.) one more balanced (on *ethnicity*) data set with removed: *marital-status*, *relationship* and *gender*. Then these models are being interpreted using the [eli5](https://github.com/TeamHG-Memex/eli5) library.
 
 This project consists of one main modules: **interpret_model.py**.
 
@@ -113,7 +113,7 @@ From the classifications reports we could identify some specifics about the four
 
 We can now evaluate the feature importance of each model:
 
-- On the one hand we could see that in Model 1. the columns: marital-status and relationship play an important role in deciding whether a person should earn >= 50k. In my opinion these two columns should not be part of the models and were therefore removed in Model 2., 3. and 4. Looking at other models we could now see that the most important role in deciding whether a person earns >= 50k is played by the columns: *capital-gain*, *occupation* and *education-num*.
+- On the one hand we could see that in Model 1. the columns: *marital-status* and *relationship* play an important role in deciding whether a person should earn >= 50k. In my opinion these two columns should not be part of the models and were therefore removed in Models 2., 3. and 4. Looking at other models we could now see that the most important role in deciding whether a person earns >= 50k is played by the columns: *capital-gain*, *occupation* and *education-num*.
 
 - On the other hand we see that in Model 2. a key influencer on deciding whether a person should earn < 50k is the *gender*. The feature *gender__ Female* affects the prediction in a negative way, and, therefore, I have balanced the data set in Model 3. to have equal number of *males* and *females* that earn >= 50k or < 50k (see *support* in the classification report). As we can see in the feature importance column of Model 3., this have not made any positive impact or the negativity of the *gender__ Female* feature. Thus, in Model 4. I have also removed the *gender* column and balanced the model on *ethnicity*.
 
@@ -155,7 +155,7 @@ Let us now interpret and evaluate some concrete examples of the test data set.
 | -0.339: relationship__ Husband                   |                                                   |                                                   |                                                   |
 | -0.932: BIAS                                     |                                                   |                                                   |                                                   |
 
-From my point of view this person should be classified as one earning <50k, bacause of his *age*, *hours-per-week* and *education*. That are also the results of Models 2., 3. and 4. Due to the huge impact of the *marital-status* on the decision Model 1. has predicted right.
+From my point of view this person should be classified as one earning <50k, bacause of his *age*, *hours-per-week* and *education*. That are also the results of Models 2., 3. and 4. Due to the huge impact of the *marital-status* on the decision, Model 1. has predicted, the otherwise unexpected result, right.
 
 #### Example 2
 
@@ -225,7 +225,7 @@ This example is interesting because only Model 4. classifies it wrong, because t
 | -0.701: occupation__ Prof-specialty               |                                                  |                                                  |                                                   |
 | -0.864: education-num                             |                                                  |                                                  |                                                   |
 
-There are quite a lot of such examples in which Model 1. got the wrong result and Models 2., 3. and 4. guessed it right. In this case we could see that the decision for the person's income to be <50k of the first Model is mainly based on the fact that the person has *never married*. In the other three cases there are not strong indicators for a false decision.  
+There are quite a lot of such examples in which Model 1. got the wrong result and Models 2., 3. and 4. guessed it right. In this case we could see that the decision for the person's income to be <50k of the first Model is mainly based on the fact that the person has *never married*. In the other three cases there are not strong indicators for a negative decision.  
 
 #### Example 4
 
