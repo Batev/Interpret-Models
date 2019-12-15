@@ -1,6 +1,4 @@
-# White-Box Model Interpretation
-
-Logistic Regression and Decision Tree Classifiers are being trained with the [Census Income Data Set](https://archive.ics.uci.edu/ml/datasets/census+income) to predict weather a person makes over 50K a year. Four different models per classifier are being trained - (1.) one with the raw data set without any modifications, (2.) one with two removed features: *marital-status*, *relationship*, (3.) one with the same features removed but a balanced (on *gender*) data set (with [xai](https://github.com/EthicalML/xai) toolbox) and (4.) one more balanced (on *ethnicity*) data set with removed: *marital-status*, *relationship* and *gender*. Then these models are being interpreted using the [eli5](https://github.com/TeamHG-Memex/eli5) library.
+# White-Box vs. Black-Box Model Interpretation
 
 This project consists of one main modules: **interpret_model.py**.
 
@@ -15,10 +13,32 @@ This project consists of one main modules: **interpret_model.py**.
   - numpy: 1.16.0
   - eli5: 0.10.1
   - pandas: 0.25.3
+  - lime: 0.1.1.36
 
-## Results
+## White-Box Model Interpretation
 
-### Classification report
+There are models such as linear regression, decision trees, etc. that have the advantage to be easily interpretable. These models can have properties such as linearity and monotonicity, interactions between its features and are also suitable for different tasks (regression, classification or both).
+
+ * linearity - if the association between features and target is modelled linearly.
+ * monotonicity - an increase in the feature value always affects the target outcome in the same way (increase or decrease).
+
+However, these models also have one big disadvantage that predictive performance is lost compared to other machine learning models.
+
+| Algorithm           | Linear | Monotone | Interaction | Task       |
+|---------------------|--------|----------|-------------|------------|
+| Linear regression   | Yes    | Yes      | No          | regr       |
+| Logistic regression | No     | Yes      | No          | class      |
+| Decision trees      | No     | Some     | Yes         | class,regr |
+| RuleFit             | Yes    | No       | Yes         | class,regr |
+| Naive Bayes         | No     | Yes      | No          | class      |
+| k-nearest neighbors | No     | No       | No          | class,regr |
+(See https://christophm.github.io/interpretable-ml-book/simple.html#simple)
+
+In our code example Logistic Regression and Decision Tree Classifiers are being trained with the [Census Income Data Set](https://archive.ics.uci.edu/ml/datasets/census+income) to predict weather a person makes over 50K a year. Four different models per classifier are being trained - (1.) one with the raw data set without any modifications, (2.) one with two removed features: *marital-status*, *relationship*, (3.) one with the same features removed but a balanced (on *gender*) data set (with [xai](https://github.com/EthicalML/xai) toolbox) and (4.) one more balanced (on *ethnicity*) data set with removed: *marital-status*, *relationship* and *gender*. Then these models are being interpreted using the [eli5](https://github.com/TeamHG-Memex/eli5) library.
+
+### Results
+
+#### Classification report
 
 - **Model 1.** accuracy: 0.8108301770907974
 - *Classification report*:
@@ -70,7 +90,7 @@ From the classifications reports we could identify some specifics about the four
 
 - [Recall](https://www.scikit-yb.org/en/latest/api/classifier/classification_report.html) is the ability of a classifier to find all positive instances. Model 4. performs better regarding the recall for people that < 50k (~89% of the people that earn < 50k were truly classified) than the other three models (which show almost the same values). But on the contrary Model 3. and 4. perform worse on the people that earn >= 50k and were truly classified (less false negatives for 1. and 2.).
 
-### Feature Importance
+#### Feature Importance
 
 - Feature importance table for each of the models. *(Weight: Feature)*
 
@@ -117,11 +137,11 @@ We can now evaluate the feature importance of each model:
 
 - On the other hand we see that in Model 2. a key influencer on deciding whether a person should earn < 50k is the *gender*. The feature *gender__ Female* affects the prediction in a negative way, and, therefore, I have balanced the data set in Model 3. to have equal number of *males* and *females* that earn >= 50k or < 50k (see *support* in the classification report). As we can see in the feature importance column of Model 3., this have not made any positive impact or the negativity of the *gender__ Female* feature. Thus, in Model 4. I have also removed the *gender* column and balanced the model on *ethnicity*.
 
-### Examples Evaluation
+#### Examples Evaluation
 
 Let us now interpret and evaluate some concrete examples of the test data set.
 
-#### Example 1
+##### Example 1
 
 | Feature        | Value              |
 |----------------|--------------------|
@@ -157,7 +177,7 @@ From my point of view this person should be classified as one earning <50k, baca
 | -0.339: relationship__ Husband                   |                                                   |                                                   |                                                   |
 | -0.932: BIAS                                     |                                                   |                                                   |                                                   |
 
-#### Example 2
+##### Example 2
 
 | Feature        | Value   |
 |----------------|---------|
@@ -191,7 +211,7 @@ This example is interesting because only Model 4. classifies it wrong, because t
 | -0.399: hours-per-week                            |                                                   |                                                                |                                                  |
 | -0.414: occupation__ Sales                        |                                                   |                                                                |                                                  |
 
-#### Example 3
+##### Example 3
 
 | Feature        | Value          |
 |----------------|----------------|
@@ -227,7 +247,7 @@ There are quite a lot of such examples in which Model 1. got the wrong result an
 | -0.701: occupation__ Prof-specialty               |                                                  |                                                  |                                                   |
 | -0.864: education-num                             |                                                  |                                                  |                                                   |
 
-#### Example 4
+##### Example 4
 
 | Feature        | Value              |
 |----------------|--------------------|
@@ -263,7 +283,7 @@ In this example we see that only Model 2. classified the person's income wrong, 
 | -0.926: occupation__ Farming-fishing             |                                                   |                                                  |                                                  |
 | -0.932: BIAS                                     |                                                   |                                                  |                                                  |
 
-#### Example 5
+##### Example 5
 
 | Feature        | Value              |
 |----------------|--------------------|
@@ -299,7 +319,69 @@ In this example we can see that only Model 4. classified the person's income rig
 | -0.932  BIAS                                     |                                                  |                                                  |                                                   |
 | -1.202  education-num                            |                                                  |                                                  |                                                   |
 
-## TODO
+### TODO
 
 - Interpret and evaluate the results of the models trained with a *Decision Tree Classifier* 
 > Currently the *Decision Tree Classifier*'s code is commented out.
+
+## Black-Box Model Interpretation
+
+For our black-box interpretations we are going to use [**LIME**](https://github.com/marcotcr/lime). *LIME* explanations are based on *local surrogate models*. These models are interpretable models (like a linear model or decision tree) that are learned on the predictions of the original black box model. But instead of trying to fit a global surrogate model, LIME focuses on fitting local surrogate models to explain why single predictions were made.
+
+(XG-)**Boosting**, in contrast to *Logistic Regression* and *Decision Trees*, takes a more iterative approach. It is an ensemble technique in that many models are combined together to perform the final one, but rather than training all of the models in isolation of one another, boosting trains models in succession, with each new model being trained to correct the errors made by the previous ones.
+
+| AI algorithm class                  | Learning technique     | Scale of explainability (1-5) | Reasoning/Explanation                                                                                                                                                                                                                                                                                                                                |
+|-------------------------------------|------------------------|-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ...                                 | ...                    | ...                           | ...                                                                                                                                                                                                                                                                                                                                                  |
+| Supervised or unsupervised learning | Logistic regression    | 3                             | ...                                                                                                                                                                                                                                                                                                                                                  |
+| Supervised or unsupervised learning | Decision trees         | 4                             | ...                                                                                                                                                                                                                                                                                                                                                  |
+| Ensemble models                     | Random forest/boosting | 3                             | Random forest techniques operate by constructing a multitude of decision trees during training then outputting the prediction that is the average prediction across all the trees. Even though decision trees are pretty explainable, random forest adds another layer of tree aggregation that makes understanding the final result more difficult. |
+| ...                                 | ...                    | ...                           | ...                                                                                                                                                                                                                                                                                                                                                  |
+(See [Explainable AI Driving business value through greater understanding, p.24-25](https://www.pwc.co.uk/audit-assurance/assets/pdf/explainable-artificial-intelligence-xai.pdf))
+
+In our code example Random Forest and XGBoost classifiers are being trained with the [Census Income Data Set](https://archive.ics.uci.edu/ml/datasets/census+income) to predict weather a person makes over 50K a year. Two different models per classifier are being trained - (1.) one with the raw data set without any modifications and (4.) one more data set with removed: *marital-status*, *relationship*, *ethnicity* and *gender*. Then these models are being interpreted using the **LIME**.
+
+### Results
+
+#### Classification report
+
+- **Model 1.** accuracy: **0.8626266762206981**
+- *Classification report*:
+
+| Model 1.     | precision | recall | f1-score | support |
+|--------------|-----------|--------|----------|---------|
+| 0            | 0.88      | 0.95   | 0.91     | 7417    |
+| 1            | 0.79      | 0.59   | 0.67     | 2352    |
+| micro avg    | 0.86      | 0.86   | 0.86     | 9769    |
+| macro avg    | 0.83      | 0.77   | 0.79     | 9769    |
+| weighted avg | 0.86      | 0.86   | 0.86     | 9769    |
+
+- **Model 2.** (without *marital-status*, *relationship*, *ethnicity* and *gender*) accuracy: **0.8462483365748797**
+- *Classification report*:
+
+| Model 2      | precision | recall | f1-score | support |
+|--------------|-----------|--------|----------|---------|
+| 0            | 0.85      | 0.96   | 0.90     | 7417    |
+| 1            | 0.80      | 0.48   | 0.60     | 2352    |
+| micro avg    | 0.85      | 0.85   | 0.85     | 9769    |
+| macro avg    | 0.83      | 0.72   | 0.75     | 9769    |
+| weighted avg | 0.84      | 0.85   | 0.83     | 9769    |
+
+The classification reports for both models look pretty similar. One notices that they perform better than the other models achieving accuracy of more than 84%.
+
+#### Examples evaluation
+
+From the examples' results one notices that *LIME* chooses the five most important features and their importance. Comparing both models it is apparent that the only feature that plays an important role in the predictions, that was removed from *Model 2.*, is *marital-status*. And in some examples this feature plays a crucial role.
+
+![Person 1114](results/Person_1114.png)
+
+In the example above it is easily seen that *material-status* has enough impact to switch the decision from <50k to >= 50k, which in this case generates the wrong answer. Same result for the other two examples.
+
+![Person 7544](results/Person_7544.png)
+
+![Person 8539](results/Person_8539.png)
+
+### TODO
+
+- Interpret and evaluate the results of the models trained with a *Random Forest Classifier* 
+> Currently the *Random Forest Classifier*'s code is commented out.
