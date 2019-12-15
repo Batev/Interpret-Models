@@ -32,6 +32,7 @@ However, these models also have one big disadvantage that predictive performance
 | RuleFit             | Yes    | No       | Yes         | class,regr |
 | Naive Bayes         | No     | Yes      | No          | class      |
 | k-nearest neighbors | No     | No       | No          | class,regr |
+
 (See https://christophm.github.io/interpretable-ml-book/simple.html#simple)
 
 In our code example Logistic Regression and Decision Tree Classifiers are being trained with the [Census Income Data Set](https://archive.ics.uci.edu/ml/datasets/census+income) to predict weather a person makes over 50K a year. Four different models per classifier are being trained - (1.) one with the raw data set without any modifications, (2.) one with two removed features: *marital-status*, *relationship*, (3.) one with the same features removed but a balanced (on *gender*) data set (with [xai](https://github.com/EthicalML/xai) toolbox) and (4.) one more balanced (on *ethnicity*) data set with removed: *marital-status*, *relationship* and *gender*. Then these models are being interpreted using the [eli5](https://github.com/TeamHG-Memex/eli5) library.
@@ -337,6 +338,7 @@ For our black-box interpretations we are going to use [**LIME**](https://github.
 | Supervised or unsupervised learning | Decision trees         | 4                             | ...                                                                                                                                                                                                                                                                                                                                                  |
 | Ensemble models                     | Random forest/boosting | 3                             | Random forest techniques operate by constructing a multitude of decision trees during training then outputting the prediction that is the average prediction across all the trees. Even though decision trees are pretty explainable, random forest adds another layer of tree aggregation that makes understanding the final result more difficult. |
 | ...                                 | ...                    | ...                           | ...                                                                                                                                                                                                                                                                                                                                                  |
+
 (See [Explainable AI Driving business value through greater understanding, p.24-25](https://www.pwc.co.uk/audit-assurance/assets/pdf/explainable-artificial-intelligence-xai.pdf))
 
 In our code example Random Forest and XGBoost classifiers are being trained with the [Census Income Data Set](https://archive.ics.uci.edu/ml/datasets/census+income) to predict weather a person makes over 50K a year. Two different models per classifier are being trained - (1.) one with the raw data set without any modifications and (4.) one more data set with removed: *marital-status*, *relationship*, *ethnicity* and *gender*. Then these models are being interpreted using the **LIME**.
@@ -375,11 +377,13 @@ From the examples' results one notices that *LIME* chooses the five most importa
 
 ![Person 1114](results/Person_1114.png)
 
-In the example above it is easily seen that *material-status* has enough impact to switch the decision from <50k to >= 50k, which in this case generates the wrong answer. Same result for the other two examples.
+In the example above it is easily seen that *material-status* has enough impact to switch the decision from <50k to >= 50k, which in this case generates the wrong answer. Similar results also show the examples below.
 
 ![Person 7544](results/Person_7544.png)
 
 ![Person 8539](results/Person_8539.png)
+
+Both models show almost equal results, despite the second one is missing four features, because only one feature plays an important part in the decisions of the classifier.
 
 ### TODO
 
